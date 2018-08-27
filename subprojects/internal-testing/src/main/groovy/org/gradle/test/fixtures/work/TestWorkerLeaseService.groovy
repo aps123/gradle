@@ -96,6 +96,11 @@ class TestWorkerLeaseService implements WorkerLeaseService {
             }
 
             @Override
+            WorkerLeaseCompletion tryStartChild() {
+                return null
+            }
+
+            @Override
             boolean isLocked() {
                 return false
             }

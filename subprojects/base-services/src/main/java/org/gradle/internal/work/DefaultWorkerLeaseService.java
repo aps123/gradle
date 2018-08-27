@@ -386,6 +386,16 @@ public class DefaultWorkerLeaseService implements WorkerLeaseService, Parallelis
         }
 
         @Override
+        public WorkerLeaseCompletion tryStartChild() {
+            boolean locked = coordinationService.withStateLock(DefaultResourceLockCoordinationService.tryLock(this));
+            if (locked) {
+                return this;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
         public void leaseFinish() {
             coordinationService.withStateLock(DefaultResourceLockCoordinationService.unlock(this));
         }

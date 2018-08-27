@@ -809,6 +809,11 @@ class DefaultTaskExecutionPlanParallelTest extends AbstractProjectBuilderSpec {
         WorkerLeaseRegistry.WorkerLeaseCompletion startChild() { null }
 
         @Override
+        WorkerLeaseRegistry.WorkerLeaseCompletion tryStartChild() {
+            null
+        }
+
+        @Override
         boolean isLockedByCurrentThread() {
             return locked
         }
