@@ -218,8 +218,7 @@ class DistributedPerformanceTest extends PerformanceTest {
     }
 
     private void fillScenarioList() {
-        scenarioList.text = 'help on k9AndroidBuild;0;k9AndroidBuild'
-        // super.executeTests()
+        super.executeTests()
     }
 
     @TypeChecked(TypeCheckingMode.SKIP)
