@@ -68,21 +68,16 @@ public class IndexPageGenerator extends HtmlPageGenerator<ResultsStore> {
 
                     div().id("content");
                         div().id("controls").end();
-                        renderAllScenarios();
+                        renderSummary();
+                        sortTestResults(store).forEach(this::renderScenario);
                     end();
                     footer(this);
                 endAll();
             }
 
-            private void renderAllScenarios() {
-                TreeSet<PerformanceTestScenario> results = sortTestResults(store);
-                renderSummary(results);
-                results.forEach(this::renderScenario);
-            }
-
-            private void renderSummary(TreeSet<PerformanceTestScenario> results) {
+            private void renderSummary() {
                 long successCount = scenarioBuildResultData.values().stream().filter(ScenarioBuildResultData::isSuccessful).count();
-                long otherCount = results.size() - successCount;
+                long otherCount = scenarioBuildResultData.size() - successCount;
                 h3().text("" + successCount + " successful scenarios");
                 if (otherCount > 0) {
                     text(", " + otherCount + " failed scenarios");
@@ -100,7 +95,7 @@ public class IndexPageGenerator extends HtmlPageGenerator<ResultsStore> {
 
             private void renderArchivedScenario(PerformanceTestScenario scenario) {
                 String url = "tests/" + urlEncode(scenario.history.getId()) + ".html";
-                h2().a().href(url).text("Archived test:" + scenario.history.getDisplayName()).end().end();
+                div().a().href(url).text("Archived test:" + scenario.history.getDisplayName()).end().end();
             }
 
             private String getTestDescription(PerformanceTestScenario scenario) {
@@ -108,7 +103,7 @@ public class IndexPageGenerator extends HtmlPageGenerator<ResultsStore> {
             }
 
             private void renderActiveScenario(PerformanceTestScenario scenario) {
-                h2().classAttr("test-execution");
+                h3().classAttr("test-execution");
                     a().href(scenario.getWebUrl()).text(getTestDescription(scenario) + scenario.name).end();
                 end();
                 table().classAttr("history");
@@ -120,7 +115,7 @@ public class IndexPageGenerator extends HtmlPageGenerator<ResultsStore> {
                     th().text("Date").end();
                     th().text("Branch").end();
                     scenario.history.getScenarioLabels().forEach(this::renderHeaderForSamples);
-                    th().text("Regression").end();
+                    th().colspan("2").text("Regression").end();
                 end();
                 for (ExperimentData experiment: scenario.experiments) {
                     tr();

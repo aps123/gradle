@@ -95,7 +95,7 @@ public class TestPageGenerator extends HtmlPageGenerator<PerformanceTestHistory>
             for (String label : testHistory.getScenarioLabels()) {
                 renderHeaderForSamples(label);
             }
-            th().text("Regression").end();
+            th().colspan("2").text("Regression").end();
             th().text("Test version").end();
             th().text("Operating System").end();
             th().text("Host").end();

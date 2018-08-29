@@ -17,10 +17,11 @@
 package org.gradle.performance.results
 
 import groovy.transform.CompileStatic
+import org.gradle.performance.measure.DataSeries
 import org.gradle.performance.measure.Duration
 
 import static PrettyCalculator.toMillis
-import static org.gradle.performance.measure.DataSeries.*
+import static org.gradle.performance.measure.DataSeries.confidenceInDifference
 import static org.gradle.performance.results.PrettyCalculator.percentage
 
 /**
@@ -33,6 +34,8 @@ import static org.gradle.performance.results.PrettyCalculator.percentage
  */
 @CompileStatic
 class BaselineVersion implements VersionResults {
+    private static final double MINIMUM_CONFIDENCE = 0.99
+
     final String version
     final MeasuredOperationList results = new MeasuredOperationList()
 
@@ -71,12 +74,16 @@ class BaselineVersion implements VersionResults {
     boolean significantlyFasterThan(MeasuredOperationList other) {
         def myTime = results.totalTime
         def otherTime = other.totalTime
-        myTime && myTime.significantlyLessThan(otherTime)
+        myTime && myTime.median < otherTime.median && differenceIsSignificant(myTime, otherTime)
     }
 
     boolean significantlySlowerThan(MeasuredOperationList other) {
         def myTime = results.totalTime
         def otherTime = other.totalTime
-        myTime && myTime.significantlyGreaterThan(otherTime)
+        myTime && myTime.median > otherTime.median && differenceIsSignificant(myTime, otherTime)
+    }
+
+    private static boolean differenceIsSignificant(DataSeries<Duration> myTime, DataSeries<Duration> otherTime) {
+        confidenceInDifference(myTime, otherTime) > MINIMUM_CONFIDENCE
     }
 }

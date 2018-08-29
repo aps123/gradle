@@ -202,7 +202,7 @@ public abstract class HtmlPageGenerator<T> extends ReportRenderer<T, Writer> {
                     .end();
                 td()
                     .classAttr("numeric more-detail")
-                    .text(percentageString(experiments.confidencePercentage))
+                    .text("conf: " + percentageString(experiments.confidencePercentage))
                     .end();
             } else {
                 td().text("").end();
@@ -219,7 +219,7 @@ public abstract class HtmlPageGenerator<T> extends ReportRenderer<T, Writer> {
         protected Integer regressionPercentage;
         protected Integer confidencePercentage;
 
-        protected ExperimentData(PerformanceTestExecution execution, List<DataSeries<Duration>> experimentData, Amount<Duration> experimentWithMaxMedian, Amount<Duration> experimentWithMinMedian) {
+        protected ExperimentData(PerformanceTestExecution execution, List<DataSeries<Duration>> experimentData, Amount<Duration> experimentWithMinMedian, Amount<Duration> experimentWithMaxMedian) {
             this.execution = execution;
             this.experimentData = experimentData;
             this.experimentWithMaxMedian = experimentWithMaxMedian;
@@ -250,7 +250,6 @@ public abstract class HtmlPageGenerator<T> extends ReportRenderer<T, Writer> {
             } else {
                 experimentData.add(data);
                 minMaxCalculator.add(data.getMedian());
-
             }
         });
         return new ExperimentData(execution, experimentData, minMaxCalculator.peekFirst(), minMaxCalculator.peekLast());

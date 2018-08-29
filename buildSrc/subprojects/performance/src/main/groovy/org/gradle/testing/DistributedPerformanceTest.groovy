@@ -94,6 +94,8 @@ class DistributedPerformanceTest extends PerformanceTest {
 
     private TeamCityInstance client
 
+    // TODO Remove RESTClient completely after
+    // https://github.com/JetBrains/teamcity-rest-client/blob/cf41e051f05506832a94e6e9515d490bd6fc9b63/teamcity-rest-client-impl/src/main/kotlin/org/jetbrains/teamcity/rest/rest.kt#L257
     private RESTClient httpClient
 
     private List<String> scheduledBuildIds = Lists.newArrayList()

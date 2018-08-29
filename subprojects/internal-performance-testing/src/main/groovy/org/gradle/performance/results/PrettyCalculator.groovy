@@ -47,6 +47,6 @@ class PrettyCalculator {
     }
 
     static String percentageString(int percentage) {
-        return "$percentage %"
+        return "$percentage%"
     }
 }
